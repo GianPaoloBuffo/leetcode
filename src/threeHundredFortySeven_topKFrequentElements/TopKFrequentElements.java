@@ -30,28 +30,31 @@ public class TopKFrequentElements {
     // Time Complexity: O(n)
     // Space Complexity: O(n)
     public int[] topKFrequent(int[] nums, int k) {
+        // 1. map nums to counts
         Map<Integer, Integer> numToCount = new HashMap<>();
         for (int num : nums) {
             numToCount.put(num, numToCount.getOrDefault(num, 0) + 1);
         }
 
-        List<List<Integer>> occurrencesToValues = new ArrayList<>(nums.length);
+        // 2. build array where index is count and value is all nums with that count
+        List<List<Integer>> numsWithCount = new ArrayList<>(nums.length + 1);
         for (int i = 0; i < nums.length + 1; i++) {
-            occurrencesToValues.add(new ArrayList<>());
+            numsWithCount.add(new ArrayList<>());
         }
 
-        for (Map.Entry<Integer, Integer> numCount : numToCount.entrySet()) {
-            Integer occurrences = numCount.getValue();
-            List<Integer> existing = occurrencesToValues.get(occurrences);
-            existing.add(numCount.getKey());
+        for (Map.Entry<Integer, Integer> entry : numToCount.entrySet()) {
+            Integer num = entry.getKey();
+            Integer count = entry.getValue();
+            numsWithCount.get(count).add(num);
         }
 
+        // 3. go back from end of array k times
         List<Integer> result = new ArrayList<>();
-        for (int i = occurrencesToValues.size() - 1; i >= 0; i--) {
+        for (int i = numsWithCount.size() - 1; i >= 0; i--) {
             if (result.size() == k) {
                 break;
             }
-            result.addAll(occurrencesToValues.get(i));
+            result.addAll(numsWithCount.get(i));
         }
 
         return result.stream().mapToInt(Integer::intValue).toArray();
