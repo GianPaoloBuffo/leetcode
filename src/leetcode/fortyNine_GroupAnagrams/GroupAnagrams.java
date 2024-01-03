@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /*
 Given an array of strings strs, group the anagrams together. You can return the answer in any order.
@@ -34,20 +33,19 @@ strs[i] consists of lowercase English letters.
 public class GroupAnagrams {
 
     public List<List<String>> groupAnagrams(String[] strs) {
-        Map<List<Integer>, List<String>> charCountToGroup = new HashMap<>();
+        var charCountToGroup = new HashMap<List<Integer>, List<String>>();
 
-        for (String word : strs) {
-            List<Integer> charCounts = Arrays.asList(new Integer[26]);
-            Collections.fill(charCounts, 0);
+        for (var word : strs) {
+            var charCount = Arrays.asList(new Integer[26]);
+            Collections.fill(charCount, 0);
 
-            for (char c : word.toCharArray()) {
-                int index = (int) c - (int) 'a';
-                charCounts.set(index, charCounts.get(index) + 1);
+            for (var c : word.toCharArray()) {
+                var index = c - 'a';
+                charCount.set(index, charCount.get(index) + 1);
             }
 
-            charCountToGroup.putIfAbsent(charCounts, new ArrayList<>());
-            List<String> existingGroups = charCountToGroup.get(charCounts);
-            existingGroups.add(word);
+            charCountToGroup.putIfAbsent(charCount, new ArrayList<>());
+            charCountToGroup.get(charCount).add(word);
         }
 
         return new ArrayList<>(charCountToGroup.values());
