@@ -2,7 +2,6 @@ package leetcode.fortyNine_GroupAnagrams;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,16 +35,18 @@ public class GroupAnagrams {
         var charCountToGroup = new HashMap<List<Integer>, List<String>>();
 
         for (var word : strs) {
-            var charCount = Arrays.asList(new Integer[26]);
-            Collections.fill(charCount, 0);
+            var charCounts = new int[26];
 
             for (var c : word.toCharArray()) {
                 var index = c - 'a';
-                charCount.set(index, charCount.get(index) + 1);
+                charCounts[index]++;
             }
 
-            charCountToGroup.putIfAbsent(charCount, new ArrayList<>());
-            charCountToGroup.get(charCount).add(word);
+            // need to convert array to list so that equals operation checks by value
+            var charCountList = Arrays.stream(charCounts).boxed().toList();
+            charCountToGroup
+                    .computeIfAbsent(charCountList, k -> new ArrayList<>())
+                    .add(word);
         }
 
         return new ArrayList<>(charCountToGroup.values());
