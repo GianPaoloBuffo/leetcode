@@ -23,38 +23,38 @@ Follow up: Your algorithm's time complexity must be better than O(n log n), wher
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class TopKFrequentElements {
 
     // Time Complexity: O(n)
     // Space Complexity: O(n)
     public int[] topKFrequent(int[] nums, int k) {
-        // 1. map nums to counts
-        Map<Integer, Integer> numToCount = new HashMap<>();
-        for (int num : nums) {
-            numToCount.put(num, numToCount.getOrDefault(num, 0) + 1);
+        // 1. map num to frequency
+        var numToFrequency = new HashMap<Integer, Integer>();
+        for (var num : nums) {
+            numToFrequency.put(num, numToFrequency.getOrDefault(num, 0) + 1);
         }
 
-        // 2. build array where index is count and value is all nums with that count
-        List<List<Integer>> numsWithCount = new ArrayList<>(nums.length + 1);
-        for (int i = 0; i < nums.length + 1; i++) {
-            numsWithCount.add(new ArrayList<>());
+        // 2. build list where index is frequency and value is all nums with that frequency
+        var numsByFrequency = new ArrayList<List<Integer>>(nums.length);
+        for (var i = 0; i <= nums.length; i++) {
+            numsByFrequency.add(new ArrayList<>());
         }
 
-        for (Map.Entry<Integer, Integer> entry : numToCount.entrySet()) {
-            Integer num = entry.getKey();
-            Integer count = entry.getValue();
-            numsWithCount.get(count).add(num);
+        for (var entry : numToFrequency.entrySet()) {
+            var num = entry.getKey();
+            var frequency = entry.getValue();
+            numsByFrequency.get(frequency).add(num);
         }
 
-        // 3. go back from end of array k times
-        List<Integer> result = new ArrayList<>();
-        for (int i = numsWithCount.size() - 1; i >= 0; i--) {
+        // 3. iterate from end of array (most occurrences) k times, and build result
+        var result = new ArrayList<Integer>();
+        for (var i = numsByFrequency.size() - 1; i >= 0; i--) {
             if (result.size() == k) {
                 break;
             }
-            result.addAll(numsWithCount.get(i));
+
+            result.addAll(numsByFrequency.get(i));
         }
 
         return result.stream().mapToInt(Integer::intValue).toArray();
