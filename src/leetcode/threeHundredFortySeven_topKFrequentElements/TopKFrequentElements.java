@@ -29,32 +29,32 @@ public class TopKFrequentElements {
     // Time Complexity: O(n)
     // Space Complexity: O(n)
     public int[] topKFrequent(int[] nums, int k) {
-        // 1. map num to frequency
+        // 1. Map num to frequency
         var numToFrequency = new HashMap<Integer, Integer>();
         for (var num : nums) {
             numToFrequency.put(num, numToFrequency.getOrDefault(num, 0) + 1);
         }
 
-        // 2. build list where index is frequency and value is all nums with that frequency
-        var numsByFrequency = new ArrayList<List<Integer>>(nums.length);
+        // 2. Create list where index is frequency, and value is list of nums with that frequency
+        var numsIndexedByFrequency = new ArrayList<List<Integer>>(nums.length + 1);
         for (var i = 0; i <= nums.length; i++) {
-            numsByFrequency.add(new ArrayList<>());
+            numsIndexedByFrequency.add(new ArrayList<>());
         }
 
         for (var entry : numToFrequency.entrySet()) {
             var num = entry.getKey();
             var frequency = entry.getValue();
-            numsByFrequency.get(frequency).add(num);
+            numsIndexedByFrequency.get(frequency).add(num);
         }
 
-        // 3. iterate from end of array (most occurrences) k times, and build result
+        // 3. Iterate from end of list (most frequency) until k values are in result
         var result = new ArrayList<Integer>();
-        for (var i = numsByFrequency.size() - 1; i >= 0; i--) {
+        for (var i = nums.length; i >= 0; i--) {
             if (result.size() == k) {
                 break;
             }
 
-            result.addAll(numsByFrequency.get(i));
+            result.addAll(numsIndexedByFrequency.get(i));
         }
 
         return result.stream().mapToInt(Integer::intValue).toArray();
