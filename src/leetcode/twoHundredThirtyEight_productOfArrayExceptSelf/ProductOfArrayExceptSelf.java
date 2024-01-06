@@ -29,18 +29,18 @@ public class ProductOfArrayExceptSelf {
     // Time Complexity: O(n)
     // Space Complexity: O(1) excluding output array
     public int[] productExceptSelf(int[] nums) {
-        int[] result = new int[nums.length];
+        var result = new int[nums.length];
 
-        // 1. Add prefixes to output array
-        int prefix = 1;
-        for (int i = 0; i < nums.length; i++) {
+        // 1. iterate from left to right, store prefix product in result[i]
+        var prefix = 1;
+        for (var i = 0; i < nums.length; i++) {
             result[i] = prefix;
             prefix *= nums[i];
         }
 
-        // 2. Start at end, calculate postfixes and store answer in output array
-        int postfix = 1;
-        for (int i = nums.length - 1; i >= 0; i--) {
+        // 2. iterate from right to left, set (stored prefix product * postfix) in result[i]
+        var postfix = 1;
+        for (var i = nums.length - 1; i >= 0; i--) {
             result[i] *= postfix;
             postfix *= nums[i];
         }
