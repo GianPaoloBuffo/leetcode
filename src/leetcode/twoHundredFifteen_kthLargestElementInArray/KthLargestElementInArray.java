@@ -27,6 +27,15 @@ public class KthLargestElementInArray {
      */
 
     /**
+     * Sorting:
+     * Time complexity: O(n log n)
+     */
+    public int findKthLargestSorting(int[] nums, int k) {
+        Arrays.sort(nums);
+        return nums[nums.length - k];
+    }
+
+    /**
      * Max Heap:
      * Time complexity: O(n log n)
      */
@@ -45,52 +54,44 @@ public class KthLargestElementInArray {
     }
 
     /**
-     * Sorting:
-     * Time complexity: O(n log n)
-     */
-    public int findKthLargestSorting(int[] nums, int k) {
-        Arrays.sort(nums);
-        return nums[nums.length - k];
-    }
-
-    /**
      * Quick Select:
      * Avg time complexity: O(n)
      * Worst case time complexity: O(n^2)
      */
     public int findKthLargestQuickSelect(int[] nums, int k) {
         var targetIndex = nums.length - k;
-        return quickSelect(nums, 0, nums.length - 1, targetIndex);
+        return quickSelect(nums, targetIndex, 0, nums.length - 1);
     }
 
-    private int quickSelect(int[] nums, int l, int r, int targetIndex) {
+    private int quickSelect(int[] nums, int targetIndex, int l, int r) {
         var randomIndex = new Random().nextInt(l, r + 1);
         swap(nums, randomIndex, r);
 
         var pivotValue = nums[r];
-        var pivotPointer = l;
+        var pivotIndex = l;
 
         for (var i = l; i < r; i++) {
             if (nums[i] <= pivotValue) {
-                swap(nums, i, pivotPointer);
-                pivotPointer++;
+                swap(nums, i, pivotIndex);
+                pivotIndex++;
             }
         }
 
-        swap(nums, r, pivotPointer);
+        swap(nums, pivotIndex, r);
 
-        if (targetIndex < pivotPointer) {
-            return quickSelect(nums, l, pivotPointer - 1, targetIndex);
-        } else if (targetIndex > pivotPointer) {
-            return quickSelect(nums, pivotPointer + 1, r, targetIndex);
+        if (targetIndex > pivotIndex) {
+            return quickSelect(nums, targetIndex, pivotIndex + 1, r);
+        }
+        if (targetIndex < pivotIndex) {
+            return quickSelect(nums, targetIndex, l, pivotIndex - 1);
         }
 
-        return nums[pivotPointer];
+        return nums[pivotIndex];
     }
 
-    private void swap(int[] nums, int firstIndex, int secondIndex) {
-        var temp = nums[firstIndex];
-        nums[firstIndex] = nums[secondIndex];
-        nums[secondIndex] = temp;
+    private void swap(int[] nums, int leftIndex, int rightIndex) {
+        var temp = nums[leftIndex];
+        nums[leftIndex] = nums[rightIndex];
+        nums[rightIndex] = temp;
     }
 }
