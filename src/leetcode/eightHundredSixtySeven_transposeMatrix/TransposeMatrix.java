@@ -18,11 +18,13 @@ public class TransposeMatrix {
      * Time Complexity: O(nm)
      */
     public int[][] transpose(int[][] matrix) {
-        var result = new int[matrix[0].length][matrix.length];
+        var n = matrix.length;
+        var m = matrix[0].length;
+        var result = new int[m][n];
 
-        for (var row = 0; row < matrix.length; row++) {
-            for (var col = 0; col < matrix[row].length; col++) {
-                result[col][row] = matrix[row][col];
+        for (var col = 0; col < n; col++) {
+            for (var row = 0; row < m; row++) {
+                result[row][col] = matrix[col][row];
             }
         }
 
